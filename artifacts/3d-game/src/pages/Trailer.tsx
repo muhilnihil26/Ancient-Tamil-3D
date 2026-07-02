@@ -24,24 +24,22 @@ export default function Trailer() {
           <p className="text-muted-foreground">Prepare for the golden age of Tamilakam.</p>
         </motion.div>
 
-        {/* Video Embed */}
-        <motion.div 
-          className="max-w-5xl mx-auto aspect-video border-2 border-primary/50 box-glow-gold p-1 bg-card/50 backdrop-blur-sm relative"
+        {/* Video */}
+        <motion.div
+          className="max-w-5xl mx-auto aspect-video border-2 border-primary/50 box-glow-gold p-1 bg-black relative overflow-hidden"
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.2, duration: 0.8 }}
         >
-          {/* We use a standard iframe. To avoid errors, ensure no unclosed tags. */}
-          <iframe 
-            width="100%" 
-            height="100%" 
-            src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=0&controls=1&showinfo=0&rel=0" 
-            title="Veera Yugam Trailer Placeholder" 
-            frameBorder="0" 
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-            allowFullScreen
-            className="block"
-          ></iframe>
+          <video
+            className="w-full h-full object-cover"
+            controls
+            playsInline
+            poster=""
+          >
+            <source src="/videos/trailer.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
         </motion.div>
 
         {/* Upcoming Roadmap Teasers */}
