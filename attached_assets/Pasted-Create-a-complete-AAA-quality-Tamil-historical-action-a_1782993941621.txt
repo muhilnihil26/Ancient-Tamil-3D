@@ -1,0 +1,151 @@
+Create a complete AAA-quality Tamil historical action-adventure game website called "Veera Yugam" for Warrior Developers.
+
+Theme:
+Ancient Tamil civilization inspired by the Chola, Pandya, and Chera kingdoms. The website should look cinematic, premium, and professional like a real game studio launch page.
+
+Design:
+- Dark theme with gold and bronze accents
+- Animated particles, fire embers, and cinematic effects
+- Responsive for mobile, tablet, and desktop
+- Smooth scrolling animations
+- Tamil warrior-inspired UI
+- Professional game studio quality
+
+Pages:
+
+1. Home Page
+- Large hero banner with a legendary Tamil warrior
+- Veera Yugam logo
+- Tagline:
+  "Rise as the Guardian of Tamilagam"
+- Animated "Watch Trailer" button
+- "Download Demo" button
+- Background cinematic video section
+
+2. Story Page
+- Story of ancient Tamil kingdoms
+- Kingdoms fighting to protect Tamilagam
+- Mysterious dark force threatens the land
+- Player becomes the chosen warrior
+- Beautiful timeline design
+
+3. Characters Page
+Main Hero:
+- Veeran (Main Warrior)
+- Sword Master
+- Kingdom Protector
+
+Characters:
+- King Arulmozhi
+- Queen Vennila
+- General Athiyan
+- Sage Agathiyan
+- Dark King Irulan
+
+Each character should have:
+- Portrait card
+- Description
+- Skills
+- Kingdom affiliation
+
+4. Kingdoms Page
+Show:
+- Chola Kingdom
+- Pandya Kingdom
+- Chera Kingdom
+
+Include:
+- Maps
+- Army strength
+- Resources
+- Special abilities
+
+5. Weapons Page
+Display:
+- Ancient Tamil Swords
+- Spear
+- Bow
+- Shield
+- Legendary Divine Weapons
+
+Add:
+- Damage stats
+- Rarity
+- Unlock requirements
+
+6. Gameplay Page
+Features:
+- Open World Exploration
+- Horse Riding
+- Sword Combat
+- Kingdom Wars
+- Boss Battles
+- Temple Exploration
+- Treasure Hunting
+
+Include animated feature cards.
+
+7. Gallery
+- Screenshot showcase
+- Cinematic image gallery
+- Lightbox image viewer
+
+8. Trailer Page
+- Embedded trailer section
+- Video showcase area
+- Upcoming teasers
+
+9. News & Updates
+- Latest development logs
+- New features
+- Community updates
+
+10. Team Page
+Studio Name:
+Warrior Developers
+
+Founder:
+Muhil
+
+Sections:
+- About Studio
+- Vision
+- Future Projects
+
+11. Contact Page
+Contact Form:
+- Name
+- Email
+- Message
+
+Admin Email:
+muhilsiddhesh.in@gmail.com
+
+Features:
+- Form validation
+- Success notifications
+
+Extra Features:
+- User Login & Registration
+- Dark/Light Mode Toggle
+- Leaderboard UI
+- Achievement System UI
+- Game Download Section
+- Language Selector (Tamil and English)
+- SEO Optimization
+- PWA Support
+- Loading Screen with Veera Yugam Logo
+- Background Music Toggle
+- Animated Tamil-themed Cursor
+
+Tech Stack:
+- Next.js
+- React
+- TypeScript
+- Tailwind CSS
+- Framer Motion
+- Firebase Authentication
+- Firebase Firestore
+- Responsive Design
+
+Generate complete production-ready code with modern folder structure, reusable components, clean UI, animations, optimized performance, and deployment configuration for Replit.

@@ -1,0 +1,130 @@
+Create a complete 3D action-adventure RPG game called "Veera Yugam".
+
+Game Studio:
+Warrior Developers
+
+Creator:
+Muhil
+
+Game Type:
+Open World RPG
+Action Adventure
+Single Player Story Mode
+
+Setting:
+Ancient Tamilagam inspired by Chola, Pandya, and Chera kingdoms.
+
+Story:
+A dark king named Irulan has united evil forces and threatens Tamilagam. The player becomes Veeran, a young warrior chosen by destiny to protect the kingdoms and restore peace.
+
+Core Gameplay:
+- Third Person Camera
+- Open World Exploration
+- Sword Combat
+- Shield Blocking
+- Horse Riding
+- NPC Interaction
+- Dialogue System
+- Side Quests
+- Main Story Missions
+- Boss Battles
+- Inventory System
+- Crafting System
+- Skill Tree
+- Experience and Leveling
+- Save and Load System
+
+World Areas:
+- Chola Capital City
+- Pandya Fortress
+- Chera Forest
+- Mountain Temples
+- Hidden Caves
+- Ancient Ruins
+- Battlefields
+- Villages
+- Rivers and Waterfalls
+
+Player Features:
+- Running
+- Jumping
+- Dodging
+- Climbing
+- Sprinting
+- Swimming
+- Weapon Switching
+
+Weapons:
+- Tamil Sword
+- Spear
+- Bow and Arrow
+- Legendary Fire Sword
+- Divine Spear
+- Ancient Shield
+
+Enemies:
+- Bandits
+- Evil Soldiers
+- Forest Beasts
+- Dark Warriors
+- Mythical Creatures
+
+Bosses:
+- Karungali Beast
+- Demon Commander
+- Temple Guardian
+- Dark King Irulan
+
+NPCs:
+- King Arulmozhi
+- Queen Vennila
+- General Athiyan
+- Sage Agathiyan
+- Village Merchants
+- Blacksmiths
+
+UI:
+- Health Bar
+- Stamina Bar
+- Experience Bar
+- Mini Map
+- Quest Tracker
+- Inventory Screen
+- Skills Menu
+- Settings Menu
+
+Graphics:
+- Realistic Lighting
+- Dynamic Day and Night Cycle
+- Weather System
+- Rain
+- Fog
+- Volumetric Lighting
+- Particle Effects
+
+Audio:
+- Tamil Traditional Background Music
+- Sword Sounds
+- Horse Sounds
+- Ambient Nature Sounds
+- Battle Music
+
+Game Features:
+- 10 Main Story Chapters
+- 50 Side Quests
+- Achievement System
+- Character Progression
+- Hidden Treasures
+- Collectibles
+- Fast Travel System
+
+Technical Requirements:
+- Built using Three.js and React Three Fiber
+- Runs in browser
+- Mobile and Desktop support
+- Optimized performance
+- Modular code structure
+- Complete source code
+- Production ready
+
+Generate all required files, assets structure, game architecture, scripts, UI, player controller, combat system, quest system, inventory system, save system, and documentation.
