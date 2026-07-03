@@ -35,7 +35,11 @@ export default function Trailer() {
             className="w-full h-full object-cover"
             controls
             playsInline
-            poster=""
+            muted
+            autoPlay
+            loop
+            preload="metadata"
+            poster="/assets/coming_2031_banner.jpg"
           >
             <source src="/videos/trailer.mp4" type="video/mp4" />
             Your browser does not support the video tag.

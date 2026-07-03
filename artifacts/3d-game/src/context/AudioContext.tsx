@@ -10,7 +10,7 @@ interface AudioContextType {
 const AudioContextContext = createContext<AudioContextType | undefined>(undefined);
 
 export function AudioProvider({ children }: { children: ReactNode }) {
-  const [isMuted, setIsMuted] = useState(true); // Default true until user opts in
+  const [isMuted, setIsMuted] = useState(false); // Sound on by default
   const audioCtxRef = useRef<AudioContext | null>(null);
   
   useEffect(() => {

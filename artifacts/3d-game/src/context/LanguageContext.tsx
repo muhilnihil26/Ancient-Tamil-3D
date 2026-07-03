@@ -25,6 +25,7 @@ const translations: Record<string, Record<Language, string>> = {
   'nav.team': { EN: 'Team', TA: 'குழு' },
   'nav.about': { EN: 'About', TA: 'எங்களை பற்றி' },
   'nav.articles': { EN: 'Articles', TA: 'கட்டுரைகள்' },
+  'nav.music': { EN: 'Music', TA: 'இசை' },
   'nav.contact': { EN: 'Contact', TA: 'தொடர்பு கொள்க' },
   'nav.leaderboard': { EN: 'Leaderboard', TA: 'தரவரிசை' },
   'nav.achievements': { EN: 'Achievements', TA: 'சாதனைகள்' },

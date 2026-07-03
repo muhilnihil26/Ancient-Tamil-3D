@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { Link, useParams } from 'wouter';
 import { ArrowLeft } from 'lucide-react';
+import { useAdmin } from '@/context/AdminContext';
 import coming2031Banner from '@assets/coming_2031_banner.jpg';
 import article1 from '@assets/article_1_vision.jpg';
 import article2 from '@assets/article_2_tech.jpg';
@@ -9,7 +10,7 @@ import article4 from '@assets/article_4_culture.jpg';
 import article5 from '@assets/article_5_tech.jpg';
 import article6 from '@assets/article_6_culture.jpg';
 
-const articles = [
+const staticArticles = [
   {
     id: 'vision-2031',
     title: '2031: The Year Veera Yugam Rises',
@@ -98,7 +99,14 @@ const articles = [
 
 export default function Article() {
   const { id } = useParams<{ id: string }>();
-  const article = articles.find(a => a.id === id);
+  const { adminArticles } = useAdmin();
+
+  const adminArticle = adminArticles.find(a => a.id === id);
+  const staticArticle = staticArticles.find(a => a.id === id);
+  const article = staticArticle || (adminArticle ? {
+    ...adminArticle,
+    image: coming2031Banner,
+  } : null);
 
   if (!article) {
     return (

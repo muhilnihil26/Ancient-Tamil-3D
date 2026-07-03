@@ -28,6 +28,7 @@ export default function Navbar() {
     { href: '/kingdoms', label: 'nav.kingdoms' },
     { href: '/gameplay', label: 'nav.gameplay' },
     { href: '/articles', label: 'nav.articles' },
+    { href: '/music', label: 'nav.music' },
     { href: '/about', label: 'nav.about' },
   ];
 

@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { Link } from 'wouter';
+import { useAdmin } from '@/context/AdminContext';
 import coming2031Banner from '@assets/coming_2031_banner.jpg';
 import article1 from '@assets/article_1_vision.jpg';
 import article2 from '@assets/article_2_tech.jpg';
@@ -8,7 +9,7 @@ import article4 from '@assets/article_4_culture.jpg';
 import article5 from '@assets/article_5_tech.jpg';
 import article6 from '@assets/article_6_culture.jpg';
 
-const articles = [
+const staticArticles = [
   {
     id: 'vision-2031',
     title: '2031: The Year Veera Yugam Rises',
@@ -66,9 +67,23 @@ const articles = [
 ];
 
 export default function Articles() {
+  const { adminArticles } = useAdmin();
+
+  const adminArticleCards = adminArticles.map((a) => ({
+    id: a.id,
+    title: a.title,
+    category: a.category,
+    date: a.date,
+    author: a.author,
+    excerpt: a.excerpt,
+    image: coming2031Banner,
+  }));
+
+  const allArticles = [...adminArticleCards, ...staticArticles];
+
   return (
     <div className="min-h-screen pt-20 pb-24 noise-bg bg-background">
-      
+
       {/* Hero Banner */}
       <div className="relative w-full h-[40vh] md:h-[60vh] overflow-hidden mb-16 border-b border-primary/30">
         {coming2031Banner ? (
@@ -78,7 +93,7 @@ export default function Articles() {
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-background to-transparent" />
         <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-4">
-          <motion.h1 
+          <motion.h1
             className="font-serif text-4xl md:text-6xl lg:text-7xl font-bold text-primary tracking-widest text-glow-gold mb-4"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -99,8 +114,8 @@ export default function Articles() {
 
       <div className="container mx-auto px-4 md:px-8 max-w-7xl">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {articles.map((article, idx) => (
-            <motion.article 
+          {allArticles.map((article, idx) => (
+            <motion.article
               key={article.id}
               className="bg-card border border-border/30 group flex flex-col h-full overflow-hidden hover:border-primary/50 transition-all box-glow-gold-hover"
               initial={{ opacity: 0, y: 30 }}
@@ -118,21 +133,21 @@ export default function Articles() {
                   {article.category}
                 </div>
               </div>
-              
+
               <div className="p-6 flex flex-col flex-grow">
                 <div className="flex justify-between items-center mb-4 text-xs font-mono text-muted-foreground uppercase tracking-wider">
                   <span>{article.date}</span>
                   <span>By {article.author}</span>
                 </div>
-                
+
                 <h3 className="font-serif text-xl md:text-2xl text-foreground font-bold mb-4 group-hover:text-primary transition-colors leading-tight">
                   {article.title}
                 </h3>
-                
+
                 <p className="text-muted-foreground mb-8 flex-grow text-sm leading-relaxed">
                   {article.excerpt}
                 </p>
-                
+
                 <Link href={`/articles/${article.id}`} className="inline-flex items-center text-sm font-bold uppercase tracking-widest text-foreground group-hover:text-primary transition-colors w-max mt-auto">
                   Read Transcripts <span className="ml-2 group-hover:translate-x-2 transition-transform">→</span>
                 </Link>

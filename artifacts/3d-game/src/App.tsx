@@ -9,6 +9,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { LanguageProvider } from '@/context/LanguageContext';
 import { ThemeProvider } from '@/context/ThemeContext';
 import { AudioProvider } from '@/context/AudioContext';
+import { AdminProvider } from '@/context/AdminContext';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import CustomCursor from '@/components/CustomCursor';
@@ -31,6 +32,8 @@ import Contact from '@/pages/Contact';
 import Leaderboard from '@/pages/Leaderboard';
 import Achievements from '@/pages/Achievements';
 import Download from '@/pages/Download';
+import Admin from '@/pages/Admin';
+import Music from '@/pages/Music';
 
 const queryClient = new QueryClient();
 
@@ -81,6 +84,8 @@ function AnimatedSwitch() {
         <Route path="/leaderboard" component={() => <PageWrapper component={Leaderboard} />} />
         <Route path="/achievements" component={() => <PageWrapper component={Achievements} />} />
         <Route path="/download" component={() => <PageWrapper component={Download} />} />
+        <Route path="/music" component={() => <PageWrapper component={Music} />} />
+        <Route path="/admin" component={() => <PageWrapper component={Admin} />} />
         <Route component={() => <PageWrapper component={NotFound} />} />
       </Switch>
     </AnimatePresence>
@@ -103,6 +108,7 @@ function App() {
   return (
     <ThemeProvider>
       <AudioProvider>
+        <AdminProvider>
         <LanguageProvider>
           <QueryClientProvider client={queryClient}>
             <TooltipProvider>
@@ -115,6 +121,7 @@ function App() {
             </TooltipProvider>
           </QueryClientProvider>
         </LanguageProvider>
+        </AdminProvider>
       </AudioProvider>
     </ThemeProvider>
   );
