@@ -30,6 +30,9 @@ export interface Article {
 }
 
 interface AdminContextType {
+  founderPhoto: string | null;
+  setFounderPhoto: (src: string) => void;
+
   isAdmin: boolean;
   login: (email: string, password: string) => boolean;
   logout: () => void;
@@ -54,6 +57,7 @@ export function AdminProvider({ children }: { children: ReactNode }) {
   const [songs, setSongs] = useState<Song[]>([]);
   const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
   const [adminArticles, setAdminArticles] = useState<Article[]>([]);
+  const [founderPhoto, setFounderPhotoState] = useState<string | null>(null);
 
   useEffect(() => {
     const adminSession = localStorage.getItem('vy_admin_session');
@@ -67,6 +71,9 @@ export function AdminProvider({ children }: { children: ReactNode }) {
 
     const savedArticles = localStorage.getItem('vy_admin_articles');
     if (savedArticles) setAdminArticles(JSON.parse(savedArticles));
+
+    const savedPhoto = localStorage.getItem('vy_founder_photo');
+    if (savedPhoto) setFounderPhotoState(savedPhoto);
   }, []);
 
   useEffect(() => {
@@ -80,6 +87,11 @@ export function AdminProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     localStorage.setItem('vy_admin_articles', JSON.stringify(adminArticles));
   }, [adminArticles]);
+
+  const setFounderPhoto = (src: string) => {
+    localStorage.setItem('vy_founder_photo', src);
+    setFounderPhotoState(src);
+  };
 
   const login = (email: string, password: string) => {
     if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
@@ -160,6 +172,8 @@ export function AdminProvider({ children }: { children: ReactNode }) {
         adminArticles,
         addArticle,
         removeArticle,
+        founderPhoto,
+        setFounderPhoto,
       }}
     >
       {children}
