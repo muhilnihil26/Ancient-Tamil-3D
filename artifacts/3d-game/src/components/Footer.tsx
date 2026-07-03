@@ -16,26 +16,29 @@ export default function Footer() {
             <p className="text-muted-foreground max-w-md mt-4">
               {t('hero.tagline')}. Explore the ancient Chola, Pandya, and Chera kingdoms in this AAA-quality historical action-adventure.
             </p>
+            <div className="mt-6 flex items-center gap-2 text-sm text-primary font-bold uppercase tracking-widest">
+              <span className="w-2 h-2 rounded-full bg-primary animate-pulse-gold"></span>
+              Coming 2031
+            </div>
           </div>
           
           <div>
             <h4 className="font-serif text-lg text-foreground mb-4 uppercase tracking-wider">Explore</h4>
             <ul className="space-y-2">
               <li><Link href="/story" className="text-muted-foreground hover:text-primary transition-colors">{t('nav.story')}</Link></li>
-              <li><Link href="/characters" className="text-muted-foreground hover:text-primary transition-colors">{t('nav.characters')}</Link></li>
               <li><Link href="/kingdoms" className="text-muted-foreground hover:text-primary transition-colors">{t('nav.kingdoms')}</Link></li>
               <li><Link href="/gameplay" className="text-muted-foreground hover:text-primary transition-colors">{t('nav.gameplay')}</Link></li>
+              <li><Link href="/articles" className="text-muted-foreground hover:text-primary transition-colors">{t('nav.articles')}</Link></li>
             </ul>
           </div>
 
           <div>
             <h4 className="font-serif text-lg text-foreground mb-4 uppercase tracking-wider">Connect</h4>
             <ul className="space-y-2">
+              <li><Link href="/about" className="text-muted-foreground hover:text-primary transition-colors">{t('nav.about')}</Link></li>
               <li><Link href="/news" className="text-muted-foreground hover:text-primary transition-colors">{t('nav.news')}</Link></li>
-              <li><Link href="/team" className="text-muted-foreground hover:text-primary transition-colors">{t('nav.team')}</Link></li>
               <li><Link href="/contact" className="text-muted-foreground hover:text-primary transition-colors">{t('nav.contact')}</Link></li>
               <li><Link href="/leaderboard" className="text-primary font-bold hover:text-primary/80 transition-colors">{t('nav.leaderboard')}</Link></li>
-              <li><Link href="/achievements" className="text-primary font-bold hover:text-primary/80 transition-colors">{t('nav.achievements')}</Link></li>
               <li><Link href="/download" className="text-primary font-bold hover:text-primary/80 transition-colors underline decoration-primary/50 underline-offset-4">Download Demo</Link></li>
             </ul>
           </div>
@@ -47,10 +50,10 @@ export default function Footer() {
           </p>
           
           <div className="flex space-x-6 text-muted-foreground mb-4 md:mb-0">
-            <a href="#" className="hover:text-primary transition-colors"><SiDiscord size={20} /></a>
-            <a href="#" className="hover:text-primary transition-colors"><SiX size={20} /></a>
-            <a href="#" className="hover:text-primary transition-colors"><SiYoutube size={20} /></a>
-            <a href="#" className="hover:text-primary transition-colors"><SiInstagram size={20} /></a>
+            <a href="#" aria-label="Discord" className="hover:text-primary transition-colors"><SiDiscord size={20} /></a>
+            <a href="#" aria-label="X (Twitter)" className="hover:text-primary transition-colors"><SiX size={20} /></a>
+            <a href="#" aria-label="YouTube" className="hover:text-primary transition-colors"><SiYoutube size={20} /></a>
+            <a href="#" aria-label="Instagram" className="hover:text-primary transition-colors"><SiInstagram size={20} /></a>
           </div>
 
           <p className="text-sm text-muted-foreground">

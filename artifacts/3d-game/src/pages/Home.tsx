@@ -39,6 +39,15 @@ const StatCounter = ({ end, duration, label }: { end: number, duration: number, 
 
 export default function Home() {
   const { t } = useLanguage();
+  const [titleIdx, setTitleIdx] = useState(0);
+  const titles = ["Guardian", "Warrior", "King", "Conqueror", "Legend"];
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTitleIdx((prev) => (prev + 1) % titles.length);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, [titles.length]);
 
   const features = [
     { icon: <Sword size={32} />, title: 'Epic Combat', desc: 'Master ancient Tamil martial arts and wielding legendary weapons.' },
@@ -48,13 +57,36 @@ export default function Home() {
 
   return (
     <div className="min-h-screen relative w-full noise-bg">
+      {/* Floating 2031 Badge */}
+      <div className="fixed bottom-6 right-6 z-50 animate-pulse-gold rounded-full px-4 py-2 bg-background/80 backdrop-blur-md border border-primary flex items-center gap-2 pointer-events-none">
+        <span className="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+        <span className="text-sm font-bold uppercase tracking-widest text-primary">Coming 2031</span>
+      </div>
+
       {/* Hero Section */}
-      <section className="relative h-[100dvh] flex flex-col items-center justify-center pt-20">
+      <section className="relative h-[100dvh] flex flex-col items-center justify-center pt-20 overflow-hidden">
         <div className="absolute inset-0 z-0">
           <img src={heroBg} alt="Hero Background" className="w-full h-full object-cover opacity-20" />
           <div className="absolute inset-0 bg-background/80" />
         </div>
         
+        {/* Ambient Ember Particles */}
+        <div className="absolute inset-0 z-[5] pointer-events-none overflow-hidden">
+          {Array.from({ length: 20 }).map((_, i) => (
+            <div 
+              key={i} 
+              className="absolute w-1 h-1 bg-primary rounded-full animate-ember"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+                animationDelay: `${Math.random() * 5}s`,
+                animationDuration: `${3 + Math.random() * 4}s`,
+                boxShadow: '0 0 8px rgba(212,175,55,0.8)'
+              }}
+            />
+          ))}
+        </div>
+
         <HeroScene />
         
         <div className="relative z-20 text-center px-4 max-w-5xl mx-auto flex flex-col items-center">
@@ -68,27 +100,39 @@ export default function Home() {
           </motion.h1>
           
           <motion.div 
-            className="overflow-hidden mb-12"
+            className="overflow-hidden mb-6"
             initial="hidden"
             animate="visible"
             variants={{
               visible: { transition: { staggerChildren: 0.05 } }
             }}
           >
-            <p className="font-serif text-xl md:text-3xl text-foreground uppercase tracking-widest">
-              {t('hero.tagline').split('').map((char, index) => (
-                <motion.span 
-                  key={index} 
-                  variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
-                >
-                  {char}
-                </motion.span>
-              ))}
+            <p className="font-serif text-xl md:text-3xl text-foreground uppercase tracking-widest flex items-center justify-center gap-2 flex-wrap">
+              <span>Rise as the</span>
+              <motion.span 
+                key={titleIdx}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                className="text-primary inline-block min-w-[150px] text-left"
+              >
+                {titles[titleIdx]}
+              </motion.span>
+              <span>of Tamilakam</span>
             </p>
           </motion.div>
+          
+          <motion.p
+            className="text-muted-foreground tracking-[0.2em] uppercase text-sm mb-12 max-w-2xl"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1, duration: 1 }}
+          >
+            The open-world action RPG from Warrior Developers. Arriving 2031.
+          </motion.p>
 
           <motion.div 
-            className="flex flex-col sm:flex-row w-full max-w-lg mx-auto sm:max-w-none justify-center mt-12 rounded-lg overflow-hidden border border-primary/40 box-glow-gold"
+            className="flex flex-col sm:flex-row w-full max-w-lg mx-auto sm:max-w-none justify-center mt-6 rounded-lg overflow-hidden border border-primary/40 box-glow-gold"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 1.5, duration: 1 }}

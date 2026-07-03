@@ -6,6 +6,13 @@ export default function CustomCursor() {
   const [isHovering, setIsHovering] = useState(false);
 
   useEffect(() => {
+    document.body.classList.add('custom-cursor-active');
+    return () => {
+      document.body.classList.remove('custom-cursor-active');
+    };
+  }, []);
+
+  useEffect(() => {
     const updateMousePosition = (e: MouseEvent) => {
       setMousePosition({ x: e.clientX, y: e.clientY });
     };

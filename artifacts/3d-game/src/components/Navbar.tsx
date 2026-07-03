@@ -2,13 +2,15 @@ import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'wouter';
 import { useLanguage } from '@/context/LanguageContext';
 import { useTheme } from '@/context/ThemeContext';
-import { Menu, X, Globe, Moon, Sun } from 'lucide-react';
+import { useAudio } from '@/context/AudioContext';
+import { Menu, X, Globe, Moon, Sun, Volume2, VolumeX } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function Navbar() {
   const [location] = useLocation();
   const { language, toggleLanguage, t } = useLanguage();
   const { theme, toggleTheme } = useTheme();
+  const { isMuted, toggleMute } = useAudio();
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -23,13 +25,10 @@ export default function Navbar() {
   const navLinks = [
     { href: '/', label: 'nav.home' },
     { href: '/story', label: 'nav.story' },
-    { href: '/characters', label: 'nav.characters' },
     { href: '/kingdoms', label: 'nav.kingdoms' },
-    { href: '/weapons', label: 'nav.weapons' },
     { href: '/gameplay', label: 'nav.gameplay' },
-    { href: '/gallery', label: 'nav.gallery' },
-    { href: '/trailer', label: 'nav.trailer' },
-    { href: '/news', label: 'nav.news' },
+    { href: '/articles', label: 'nav.articles' },
+    { href: '/about', label: 'nav.about' },
   ];
 
   return (
@@ -62,16 +61,19 @@ export default function Navbar() {
 
         {/* Actions */}
         <div className="hidden lg:flex items-center gap-4">
-          <button onClick={toggleLanguage} className="flex items-center gap-2 text-sm uppercase tracking-widest hover:text-primary transition-colors">
+          <button aria-label="Toggle language" onClick={toggleLanguage} className="flex items-center gap-2 text-sm uppercase tracking-widest hover:text-primary transition-colors">
             <Globe size={16} /> {language}
           </button>
-          <button onClick={toggleTheme} className="text-foreground hover:text-primary transition-colors">
+          <button aria-label="Toggle sound" onClick={toggleMute} className="text-foreground hover:text-primary transition-colors">
+            {isMuted ? <VolumeX size={18} /> : <Volume2 size={18} />}
+          </button>
+          <button aria-label="Toggle theme" onClick={toggleTheme} className="text-foreground hover:text-primary transition-colors">
             {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
           </button>
         </div>
 
         {/* Mobile Toggle */}
-        <button className="lg:hidden text-foreground hover:text-primary" onClick={() => setMobileMenuOpen(true)}>
+        <button aria-label="Open mobile menu" className="lg:hidden text-foreground hover:text-primary" onClick={() => setMobileMenuOpen(true)}>
           <Menu size={28} />
         </button>
       </div>
@@ -85,7 +87,7 @@ export default function Navbar() {
             exit={{ opacity: 0, y: -20 }}
             className="fixed inset-0 bg-background/95 backdrop-blur-xl z-[60] flex flex-col items-center justify-center min-h-[100dvh]"
           >
-            <button className="absolute top-6 right-6 text-foreground hover:text-primary" onClick={() => setMobileMenuOpen(false)}>
+            <button aria-label="Close mobile menu" className="absolute top-6 right-6 text-foreground hover:text-primary" onClick={() => setMobileMenuOpen(false)}>
               <X size={32} />
             </button>
 
@@ -97,16 +99,6 @@ export default function Navbar() {
                   </span>
                 </Link>
               ))}
-              <Link href="/team" onClick={() => setMobileMenuOpen(false)}>
-                <span className={`text-2xl font-serif tracking-widest transition-colors ${location === '/team' ? 'text-primary' : 'text-foreground hover:text-primary'}`}>
-                  {t('nav.team')}
-                </span>
-              </Link>
-              <Link href="/contact" onClick={() => setMobileMenuOpen(false)}>
-                <span className={`text-2xl font-serif tracking-widest transition-colors ${location === '/contact' ? 'text-primary' : 'text-foreground hover:text-primary'}`}>
-                  {t('nav.contact')}
-                </span>
-              </Link>
               <Link href="/download" onClick={() => setMobileMenuOpen(false)} className="mt-4 border border-primary/50 px-6 py-2 bg-primary/10">
                 <span className={`text-2xl font-serif tracking-widest font-bold text-primary`}>
                   Download
@@ -115,10 +107,13 @@ export default function Navbar() {
             </nav>
 
             <div className="flex gap-8">
-              <button onClick={toggleLanguage} className="flex items-center gap-2 text-lg uppercase tracking-widest hover:text-primary transition-colors">
+              <button aria-label="Toggle language" onClick={toggleLanguage} className="flex items-center gap-2 text-lg uppercase tracking-widest hover:text-primary transition-colors">
                 <Globe size={20} /> {language === 'EN' ? 'தமிழ்' : 'English'}
               </button>
-              <button onClick={toggleTheme} className="text-foreground hover:text-primary transition-colors">
+              <button aria-label="Toggle sound" onClick={toggleMute} className="text-foreground hover:text-primary transition-colors">
+                {isMuted ? <VolumeX size={24} /> : <Volume2 size={24} />}
+              </button>
+              <button aria-label="Toggle theme" onClick={toggleTheme} className="text-foreground hover:text-primary transition-colors">
                 {theme === 'dark' ? <Sun size={24} /> : <Moon size={24} />}
               </button>
             </div>
