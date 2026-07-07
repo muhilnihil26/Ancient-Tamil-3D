@@ -16,11 +16,11 @@ export default function Download() {
         </p>
         <div className="mt-12 flex flex-col md:flex-row gap-6 justify-center max-w-2xl mx-auto">
           <button className="btn-primary py-4 px-8 text-xl flex-1 flex flex-col items-center gap-2">
-            <span>🖥 Windows (EXE)</span>
+            <span>🖥 Windows (EXE) coming soon</span>
             <span className="text-xs opacity-70">Version 1.0.4 • 4.2 GB</span>
           </button>
           <button className="btn-primary py-4 px-8 text-xl flex-1 flex flex-col items-center gap-2 bg-gradient-to-r from-secondary/80 to-secondary border-secondary/50">
-            <span>⚔ Android (APK)</span>
+            <span>⚔ Android (APK) coming soon</span>
             <span className="text-xs opacity-70">Version 1.0.4 • 1.8 GB</span>
           </button>
         </div>
