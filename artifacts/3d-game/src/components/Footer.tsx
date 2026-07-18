@@ -38,7 +38,7 @@ export default function Footer() {
               <li><Link href="/about" className="text-muted-foreground hover:text-primary transition-colors">{t('nav.about')}</Link></li>
               <li><Link href="/news" className="text-muted-foreground hover:text-primary transition-colors">{t('nav.news')}</Link></li>
               <li><Link href="/contact" className="text-muted-foreground hover:text-primary transition-colors">{t('nav.contact')}</Link></li>
-              <li><Link href="/leaderboard" className="text-primary font-bold hover:text-primary/80 transition-colors">{t('nav.leaderboard')}</Link></li>
+              <li><Link href="/trailer" className="text-muted-foreground hover:text-primary transition-colors">Trailer</Link></li>
               <li><Link href="/download" className="text-primary font-bold hover:text-primary/80 transition-colors underline decoration-primary/50 underline-offset-4">Download Demo</Link></li>
             </ul>
           </div>

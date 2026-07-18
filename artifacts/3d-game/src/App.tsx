@@ -14,6 +14,7 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import CustomCursor from '@/components/CustomCursor';
 import LoadingScreen from '@/components/LoadingScreen';
+import PageMusicPlayer from '@/components/PageMusicPlayer';
 
 // Pages
 import Home from '@/pages/Home';
@@ -29,7 +30,6 @@ import About from '@/pages/About';
 import Articles from '@/pages/Articles';
 import Article from '@/pages/Article';
 import Contact from '@/pages/Contact';
-import Leaderboard from '@/pages/Leaderboard';
 import Achievements from '@/pages/Achievements';
 import Download from '@/pages/Download';
 import Admin from '@/pages/Admin';
@@ -41,10 +41,10 @@ const queryClient = new QueryClient();
 const PageWrapper = ({ component: Component }: { component: any }) => {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -20 }}
-      transition={{ duration: 0.4, ease: "easeInOut" }}
+      initial={{ opacity: 0, scale: 0.98, filter: 'blur(4px)' }}
+      animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
+      exit={{ opacity: 0, scale: 1.02, filter: 'blur(4px)' }}
+      transition={{ duration: 0.45, ease: [0.4, 0, 0.2, 1] }}
       className="w-full"
     >
       <Component />
@@ -81,7 +81,6 @@ function AnimatedSwitch() {
         <Route path="/articles" component={() => <PageWrapper component={Articles} />} />
         <Route path="/articles/:id" component={() => <PageWrapper component={Article} />} />
         <Route path="/contact" component={() => <PageWrapper component={Contact} />} />
-        <Route path="/leaderboard" component={() => <PageWrapper component={Leaderboard} />} />
         <Route path="/achievements" component={() => <PageWrapper component={Achievements} />} />
         <Route path="/download" component={() => <PageWrapper component={Download} />} />
         <Route path="/music" component={() => <PageWrapper component={Music} />} />
@@ -115,6 +114,7 @@ function App() {
               <WouterRouter base={(import.meta.env.BASE_URL || '/') === '/' ? '/' : (import.meta.env.BASE_URL || '/').replace(/\/$/, '')}>
                 <LoadingScreen />
                 <CustomCursor />
+                <PageMusicPlayer />
                 <Router />
               </WouterRouter>
               <Toaster />

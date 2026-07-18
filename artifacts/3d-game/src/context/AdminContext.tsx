@@ -4,7 +4,7 @@ export interface Song {
   id: string;
   title: string;
   artist: string;
-  src: string; // data URL or external URL
+  src: string;
   type: 'url' | 'file';
   createdAt: string;
 }
@@ -29,22 +29,39 @@ export interface Article {
   createdAt: string;
 }
 
-interface AdminContextType {
-  founderPhoto: string | null;
-  setFounderPhoto: (src: string) => void;
+export interface Trailer {
+  id: string;
+  title: string;
+  description: string;
+  src: string;       // data URL (file upload) or external URL
+  type: 'url' | 'file';
+  createdAt: string;
+}
 
+interface AdminContextType {
   isAdmin: boolean;
   login: (email: string, password: string) => boolean;
   logout: () => void;
+  // Songs
   songs: Song[];
   addSong: (song: Omit<Song, 'id' | 'createdAt'>) => void;
   removeSong: (id: string) => void;
+  // Files
   uploadedFiles: UploadedFile[];
   uploadFile: (file: File) => Promise<void>;
   removeFile: (id: string) => void;
+  // Articles
   adminArticles: Article[];
   addArticle: (article: Omit<Article, 'id' | 'createdAt'>) => void;
   removeArticle: (id: string) => void;
+  // Trailers
+  trailers: Trailer[];
+  addTrailer: (trailer: Omit<Trailer, 'id' | 'createdAt'>) => void;
+  uploadTrailer: (file: File, title: string, description: string) => Promise<void>;
+  removeTrailer: (id: string) => void;
+  // Founder photo
+  founderPhoto: string | null;
+  setFounderPhoto: (src: string) => void;
 }
 
 const ADMIN_EMAIL = 'muhilsiddhesh.in@gmail.com';
@@ -52,139 +69,89 @@ const ADMIN_PASSWORD = 'muhil@2011';
 
 const AdminContext = createContext<AdminContextType | undefined>(undefined);
 
+function uid() { return crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).slice(2); }
+
 export function AdminProvider({ children }: { children: ReactNode }) {
   const [isAdmin, setIsAdmin] = useState(false);
   const [songs, setSongs] = useState<Song[]>([]);
   const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
   const [adminArticles, setAdminArticles] = useState<Article[]>([]);
+  const [trailers, setTrailers] = useState<Trailer[]>([]);
   const [founderPhoto, setFounderPhotoState] = useState<string | null>(null);
 
   useEffect(() => {
-    const adminSession = localStorage.getItem('vy_admin_session');
-    if (adminSession === '1') setIsAdmin(true);
-
-    const savedSongs = localStorage.getItem('vy_songs');
-    if (savedSongs) setSongs(JSON.parse(savedSongs));
-
-    const savedFiles = localStorage.getItem('vy_files');
-    if (savedFiles) setUploadedFiles(JSON.parse(savedFiles));
-
-    const savedArticles = localStorage.getItem('vy_admin_articles');
-    if (savedArticles) setAdminArticles(JSON.parse(savedArticles));
-
-    const savedPhoto = localStorage.getItem('vy_founder_photo');
-    if (savedPhoto) setFounderPhotoState(savedPhoto);
+    if (localStorage.getItem('vy_admin_session') === '1') setIsAdmin(true);
+    const s = localStorage.getItem('vy_songs'); if (s) setSongs(JSON.parse(s));
+    const f = localStorage.getItem('vy_files'); if (f) setUploadedFiles(JSON.parse(f));
+    const a = localStorage.getItem('vy_admin_articles'); if (a) setAdminArticles(JSON.parse(a));
+    const t = localStorage.getItem('vy_trailers'); if (t) setTrailers(JSON.parse(t));
+    const p = localStorage.getItem('vy_founder_photo'); if (p) setFounderPhotoState(p);
   }, []);
 
-  useEffect(() => {
-    localStorage.setItem('vy_songs', JSON.stringify(songs));
-  }, [songs]);
-
-  useEffect(() => {
-    localStorage.setItem('vy_files', JSON.stringify(uploadedFiles));
-  }, [uploadedFiles]);
-
-  useEffect(() => {
-    localStorage.setItem('vy_admin_articles', JSON.stringify(adminArticles));
-  }, [adminArticles]);
-
-  const setFounderPhoto = (src: string) => {
-    localStorage.setItem('vy_founder_photo', src);
-    setFounderPhotoState(src);
-  };
+  useEffect(() => { localStorage.setItem('vy_songs', JSON.stringify(songs)); }, [songs]);
+  useEffect(() => { localStorage.setItem('vy_files', JSON.stringify(uploadedFiles)); }, [uploadedFiles]);
+  useEffect(() => { localStorage.setItem('vy_admin_articles', JSON.stringify(adminArticles)); }, [adminArticles]);
+  useEffect(() => { localStorage.setItem('vy_trailers', JSON.stringify(trailers)); }, [trailers]);
 
   const login = (email: string, password: string) => {
     if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
-      setIsAdmin(true);
-      localStorage.setItem('vy_admin_session', '1');
-      return true;
+      setIsAdmin(true); localStorage.setItem('vy_admin_session', '1'); return true;
     }
     return false;
   };
 
-  const logout = () => {
-    setIsAdmin(false);
-    localStorage.removeItem('vy_admin_session');
-  };
+  const logout = () => { setIsAdmin(false); localStorage.removeItem('vy_admin_session'); };
 
-  const addSong = (song: Omit<Song, 'id' | 'createdAt'>) => {
-    const newSong: Song = {
-      ...song,
-      id: crypto.randomUUID(),
-      createdAt: new Date().toISOString(),
+  const addSong = (song: Omit<Song, 'id' | 'createdAt'>) =>
+    setSongs(p => [...p, { ...song, id: uid(), createdAt: new Date().toISOString() }]);
+  const removeSong = (id: string) => setSongs(p => p.filter(s => s.id !== id));
+
+  const uploadFile = (file: File) => new Promise<void>((res, rej) => {
+    const r = new FileReader();
+    r.onload = () => { setUploadedFiles(p => [...p, { id: uid(), name: file.name, size: file.size, type: file.type, src: r.result as string, createdAt: new Date().toISOString() }]); res(); };
+    r.onerror = rej; r.readAsDataURL(file);
+  });
+  const removeFile = (id: string) => setUploadedFiles(p => p.filter(f => f.id !== id));
+
+  const addArticle = (article: Omit<Article, 'id' | 'createdAt'>) =>
+    setAdminArticles(p => [...p, { ...article, id: uid(), createdAt: new Date().toISOString() }]);
+  const removeArticle = (id: string) => setAdminArticles(p => p.filter(a => a.id !== id));
+
+  const addTrailer = (trailer: Omit<Trailer, 'id' | 'createdAt'>) =>
+    setTrailers(p => [...p, { ...trailer, id: uid(), createdAt: new Date().toISOString() }]);
+
+  const uploadTrailer = (file: File, title: string, description: string) => new Promise<void>((res, rej) => {
+    const r = new FileReader();
+    r.onload = () => {
+      setTrailers(p => [...p, { id: uid(), title, description, src: r.result as string, type: 'file', createdAt: new Date().toISOString() }]);
+      res();
     };
-    setSongs((prev) => [...prev, newSong]);
-  };
+    r.onerror = rej; r.readAsDataURL(file);
+  });
+  const removeTrailer = (id: string) => setTrailers(p => p.filter(t => t.id !== id));
 
-  const removeSong = (id: string) => {
-    setSongs((prev) => prev.filter((s) => s.id !== id));
-  };
-
-  const uploadFile = async (file: File) => {
-    return new Promise<void>((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => {
-        const uploaded: UploadedFile = {
-          id: crypto.randomUUID(),
-          name: file.name,
-          size: file.size,
-          type: file.type,
-          src: reader.result as string,
-          createdAt: new Date().toISOString(),
-        };
-        setUploadedFiles((prev) => [...prev, uploaded]);
-        resolve();
-      };
-      reader.onerror = reject;
-      reader.readAsDataURL(file);
-    });
-  };
-
-  const removeFile = (id: string) => {
-    setUploadedFiles((prev) => prev.filter((f) => f.id !== id));
-  };
-
-  const addArticle = (article: Omit<Article, 'id' | 'createdAt'>) => {
-    const newArticle: Article = {
-      ...article,
-      id: crypto.randomUUID(),
-      createdAt: new Date().toISOString(),
-    };
-    setAdminArticles((prev) => [...prev, newArticle]);
-  };
-
-  const removeArticle = (id: string) => {
-    setAdminArticles((prev) => prev.filter((a) => a.id !== id));
+  const setFounderPhoto = (src: string) => {
+    setFounderPhotoState(src || null);
+    if (src) localStorage.setItem('vy_founder_photo', src);
+    else localStorage.removeItem('vy_founder_photo');
   };
 
   return (
-    <AdminContext.Provider
-      value={{
-        isAdmin,
-        login,
-        logout,
-        songs,
-        addSong,
-        removeSong,
-        uploadedFiles,
-        uploadFile,
-        removeFile,
-        adminArticles,
-        addArticle,
-        removeArticle,
-        founderPhoto,
-        setFounderPhoto,
-      }}
-    >
+    <AdminContext.Provider value={{
+      isAdmin, login, logout,
+      songs, addSong, removeSong,
+      uploadedFiles, uploadFile, removeFile,
+      adminArticles, addArticle, removeArticle,
+      trailers, addTrailer, uploadTrailer, removeTrailer,
+      founderPhoto, setFounderPhoto,
+    }}>
       {children}
     </AdminContext.Provider>
   );
 }
 
 export function useAdmin() {
-  const context = useContext(AdminContext);
-  if (context === undefined) {
-    throw new Error('useAdmin must be used within an AdminProvider');
-  }
-  return context;
+  const ctx = useContext(AdminContext);
+  if (!ctx) throw new Error('useAdmin must be used within an AdminProvider');
+  return ctx;
 }
