@@ -9,8 +9,9 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
-import { Lock, LogOut, Music, FileUp, FileText, Trash2, Shield, Save, Image, LayoutDashboard } from 'lucide-react';
+import { Lock, LogOut, Music, FileUp, FileText, Trash2, Shield, Save, Image as ImageIcon, LayoutDashboard } from 'lucide-react';
 import { Link } from 'wouter';
+import muhilPhoto from '@assets/muhil_siddhesh.jpg';
 
 const loginSchema = z.object({
   email: z.string().email(),
@@ -43,6 +44,24 @@ export default function Admin() {
   const [activeTab, setActiveTab] = useState<'songs' | 'files' | 'articles' | 'site'>('songs');
   const [uploading, setUploading] = useState(false);
   const [photoUploading, setPhotoUploading] = useState(false);
+
+  const handlePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setPhotoUploading(true);
+    try {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setFounderPhoto(reader.result as string);
+        toast({ title: 'Photo Updated', description: 'Muhil\'s photo has been updated on the About page.' });
+      };
+      reader.readAsDataURL(file);
+    } catch {
+      toast({ title: 'Upload Failed', description: 'Could not read image.', variant: 'destructive' });
+    } finally {
+      setPhotoUploading(false);
+    }
+  };
 
   const loginForm = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
@@ -248,7 +267,7 @@ export default function Admin() {
               <h2 className="font-serif text-xl text-foreground uppercase tracking-widest mb-6">Founder Photo</h2>
               <label className="block border-2 border-dashed border-primary/30 p-10 text-center hover:bg-primary/5 transition-all cursor-pointer">
                 <input type="file" accept="image/*" className="hidden" onChange={handlePhotoUpload} disabled={photoUploading} />
-                <Image size={32} className="mx-auto text-primary mb-4" />
+                <ImageIcon size={32} className="mx-auto text-primary mb-4" />
                 <p className="text-foreground font-bold uppercase tracking-widest text-sm">{photoUploading ? 'Uploading...' : 'Upload Muhil Photo'}</p>
                 <p className="text-xs text-muted-foreground mt-2">Replaces the founder image on the About page.</p>
               </label>
@@ -257,7 +276,7 @@ export default function Admin() {
             <div className="bg-card border border-border/30 p-6">
               <h2 className="font-serif text-xl text-foreground uppercase tracking-widest mb-6">Preview</h2>
               <div className="w-48 h-48 md:w-64 md:h-64 border border-primary overflow-hidden rounded-md shadow-[0_0_20px_rgba(212,175,55,0.3)]">
-                <img src={founderPhoto || developerMuhil} alt="Muhil Founder" className="w-full h-full object-cover" />
+                <img src={founderPhoto || muhilPhoto} alt="Muhil Founder" className="w-full h-full object-cover" />
               </div>
               {founderPhoto && (
                 <button onClick={() => setFounderPhoto('')} className="mt-4 text-destructive text-sm uppercase tracking-widest font-bold hover:underline">

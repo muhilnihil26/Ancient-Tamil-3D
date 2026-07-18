@@ -9,7 +9,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
-import developerMuhil from '@assets/developer_muhil.jpg';
+import defaultMuhilPhoto from '@assets/muhil_siddhesh.jpg';
+import { useAdmin } from '@/context/AdminContext';
 
 const joinSchema = z.object({
   fullName: z.string().min(2, "Name must be at least 2 characters"),
@@ -22,6 +23,8 @@ const joinSchema = z.object({
 
 export default function About() {
   const { toast } = useToast();
+  const { founderPhoto } = useAdmin();
+  const muhilSrc = founderPhoto || defaultMuhilPhoto;
   
   const form = useForm<z.infer<typeof joinSchema>>({
     resolver: zodResolver(joinSchema),
@@ -86,11 +89,7 @@ export default function About() {
           <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full blur-3xl pointer-events-none" />
           <div className="relative z-10 flex flex-col md:flex-row gap-8 items-center">
             <div className="w-48 h-48 md:w-64 md:h-64 shrink-0 bg-background border border-primary overflow-hidden rounded-md relative shadow-[0_0_20px_rgba(212,175,55,0.3)]">
-              {developerMuhil ? (
-                <img src={developerMuhil} alt="Muhil" className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" />
-              ) : (
-                <User size={64} className="text-primary/50 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
-              )}
+              <img src={muhilSrc} alt="Muhil Siddhesh" className="w-full h-full object-cover hover:scale-105 transition-all duration-700" />
             </div>
             <div>
               <h2 className="font-serif text-4xl text-foreground mb-2 uppercase tracking-widest">Muhil</h2>

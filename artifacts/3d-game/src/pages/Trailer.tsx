@@ -1,6 +1,10 @@
 import { motion } from 'framer-motion';
+import { useAdmin } from '@/context/AdminContext';
 
 export default function Trailer() {
+  const { uploadedFiles } = useAdmin();
+  const adminVideos = uploadedFiles.filter(f => f.type.startsWith('video/'));
+
   const teasers = [
     { title: "Combat Deep Dive", date: "Q3 2025" },
     { title: "World Map Reveal", date: "Q4 2025" },
@@ -24,7 +28,7 @@ export default function Trailer() {
           <p className="text-muted-foreground">Prepare for the golden age of Tamilakam.</p>
         </motion.div>
 
-        {/* Video */}
+        {/* Primary Video — Aerial Intro */}
         <motion.div
           className="max-w-5xl mx-auto aspect-video border-2 border-primary/50 box-glow-gold p-1 bg-black relative overflow-hidden"
           initial={{ opacity: 0, scale: 0.95 }}
@@ -39,12 +43,46 @@ export default function Trailer() {
             autoPlay
             loop
             preload="metadata"
-            poster="/assets/coming_2031_banner.jpg"
           >
+            <source src="/videos/intro.mp4" type="video/mp4" />
             <source src="/videos/trailer.mp4" type="video/mp4" />
             Your browser does not support the video tag.
           </video>
         </motion.div>
+
+        {/* Full Cinematic Trailer */}
+        <motion.div
+          className="max-w-5xl mx-auto mt-12"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+        >
+          <h3 className="font-serif text-2xl text-foreground uppercase tracking-widest border-b border-border/50 pb-4 mb-8">Full Cinematic Trailer</h3>
+          <div className="aspect-video border border-primary/30 bg-black overflow-hidden">
+            <video className="w-full h-full object-cover" controls playsInline preload="metadata">
+              <source src="/videos/trailer.mp4" type="video/mp4" />
+            </video>
+          </div>
+        </motion.div>
+
+        {/* Admin-uploaded videos */}
+        {adminVideos.length > 0 && (
+          <motion.div
+            className="max-w-5xl mx-auto mt-12"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            <h3 className="font-serif text-2xl text-foreground uppercase tracking-widest border-b border-border/50 pb-4 mb-8">Exclusive Developer Footage</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {adminVideos.map((v) => (
+                <div key={v.id} className="aspect-video border border-primary/20 bg-black overflow-hidden">
+                  <video className="w-full h-full object-cover" controls playsInline preload="metadata" src={v.src} />
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        )}
 
         {/* Upcoming Roadmap Teasers */}
         <div className="max-w-5xl mx-auto mt-24">

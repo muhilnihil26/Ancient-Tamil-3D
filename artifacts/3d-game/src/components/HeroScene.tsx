@@ -47,7 +47,7 @@ export default function HeroScene() {
         <CSSFallbackBackground />
       ) : webgl === true ? (
         <ErrorBoundary FallbackComponent={WebGLFallback}>
-          <Canvas camera={{ position: [0, 0, 8], fov: 45 }}>
+          <Canvas className="opacity-[0.5]" camera={{ position: [0, 0, 8], fov: 45 }}>
             <fog attach="fog" args={['#0a0704', 5, 20]} />
             <ambientLight intensity={0.2} />
             <directionalLight position={[5, 5, 5]} intensity={1} color="#D4AF37" />

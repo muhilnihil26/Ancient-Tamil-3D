@@ -189,6 +189,56 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Trailer Section */}
+      <section className="py-24 relative z-10 bg-background">
+        <div className="container mx-auto px-4 md:px-8">
+          <motion.div
+            className="text-center mb-12"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            <p className="text-primary uppercase tracking-[0.3em] text-xs font-bold mb-3">Now Playing</p>
+            <h2 className="font-serif text-4xl md:text-5xl text-foreground uppercase tracking-widest mb-4">
+              Aerial <span className="text-primary text-glow-gold">Tamilakam</span>
+            </h2>
+            <p className="text-muted-foreground max-w-xl mx-auto">Experience the majesty of ancient Tamilakam from above — a glimpse of the world awaiting you in 2031.</p>
+          </motion.div>
+          <motion.div
+            className="max-w-5xl mx-auto aspect-video border border-primary/40 box-glow-gold bg-black relative overflow-hidden rounded-sm"
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+          >
+            <video
+              className="w-full h-full object-cover"
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="metadata"
+            >
+              <source src="/videos/intro.mp4" type="video/mp4" />
+            </video>
+            <div className="absolute inset-0 pointer-events-none border border-primary/20" />
+            <div className="absolute bottom-0 left-0 right-0 h-1/3 bg-gradient-to-t from-background/80 to-transparent pointer-events-none" />
+            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 text-primary uppercase tracking-[0.3em] text-xs font-bold">
+              In-Engine Footage · 2031
+            </div>
+          </motion.div>
+          <div className="text-center mt-8">
+            <Link href="/trailer" className="inline-flex items-center gap-2 text-primary uppercase tracking-widest text-sm font-bold hover:text-primary/80 transition-colors">
+              Watch Full Trailer <span className="group-hover:translate-x-1 transition-transform">→</span>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      <div className="section-divider">
+        <div className="section-divider-diamond" />
+      </div>
+
       {/* Epic Scale Statistics */}
       <section className="py-20 bg-card border-y border-primary/20 relative overflow-hidden">
         <div className="absolute inset-0 pointer-events-none opacity-5">
