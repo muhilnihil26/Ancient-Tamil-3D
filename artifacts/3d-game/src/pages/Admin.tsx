@@ -324,8 +324,9 @@ export default function Admin() {
                   <label className="block border-2 border-dashed border-primary/30 p-8 text-center hover:bg-primary/5 transition-all cursor-pointer">
                     <input type="file" accept="video/*" className="hidden" onChange={handleTrailerFileUpload} disabled={trailerUploading} />
                     <Film size={32} className="mx-auto text-primary mb-3" />
-                    <p className="font-bold uppercase tracking-widest text-sm text-foreground">{trailerUploading ? 'Uploading...' : 'Click to upload MP4 / WebM'}</p>
-                    <p className="text-xs text-muted-foreground mt-1">Large files may take a moment.</p>
+                    <p className="font-bold uppercase tracking-widest text-sm text-foreground">{trailerUploading ? 'Processing...' : 'Click to upload MP4 / WebM'}</p>
+                    <p className="text-xs text-muted-foreground mt-2">Large files supported (uses in-memory streaming).</p>
+                    <p className="text-xs text-primary/70 mt-1">⚠ Session only — video resets on page refresh. Use URL mode for permanent trailers.</p>
                   </label>
                 </div>
               )}

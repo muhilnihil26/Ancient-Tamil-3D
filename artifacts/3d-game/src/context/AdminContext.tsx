@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect, useRef, ReactNode } from 'react';
 
 export interface Song {
   id: string;
@@ -33,8 +33,9 @@ export interface Trailer {
   id: string;
   title: string;
   description: string;
-  src: string;       // data URL (file upload) or external URL
+  src: string;
   type: 'url' | 'file';
+  isSessionOnly?: boolean; // file uploads are blob URLs, session only
   createdAt: string;
 }
 
@@ -78,20 +79,35 @@ export function AdminProvider({ children }: { children: ReactNode }) {
   const [adminArticles, setAdminArticles] = useState<Article[]>([]);
   const [trailers, setTrailers] = useState<Trailer[]>([]);
   const [founderPhoto, setFounderPhotoState] = useState<string | null>(null);
+  // Keep track of blob URLs so we can revoke them on cleanup
+  const blobUrls = useRef<string[]>([]);
 
   useEffect(() => {
     if (localStorage.getItem('vy_admin_session') === '1') setIsAdmin(true);
     const s = localStorage.getItem('vy_songs'); if (s) setSongs(JSON.parse(s));
     const f = localStorage.getItem('vy_files'); if (f) setUploadedFiles(JSON.parse(f));
     const a = localStorage.getItem('vy_admin_articles'); if (a) setAdminArticles(JSON.parse(a));
-    const t = localStorage.getItem('vy_trailers'); if (t) setTrailers(JSON.parse(t));
+    // Only restore URL-type trailers (file/blob URLs don't survive page reload)
+    const t = localStorage.getItem('vy_trailers');
+    if (t) {
+      const parsed: Trailer[] = JSON.parse(t);
+      setTrailers(parsed.filter(tr => tr.type === 'url'));
+    }
     const p = localStorage.getItem('vy_founder_photo'); if (p) setFounderPhotoState(p);
+
+    // Cleanup blob URLs on unmount
+    return () => { blobUrls.current.forEach(url => URL.revokeObjectURL(url)); };
   }, []);
 
+  // Persist songs/files/articles
   useEffect(() => { localStorage.setItem('vy_songs', JSON.stringify(songs)); }, [songs]);
   useEffect(() => { localStorage.setItem('vy_files', JSON.stringify(uploadedFiles)); }, [uploadedFiles]);
   useEffect(() => { localStorage.setItem('vy_admin_articles', JSON.stringify(adminArticles)); }, [adminArticles]);
-  useEffect(() => { localStorage.setItem('vy_trailers', JSON.stringify(trailers)); }, [trailers]);
+  // Only persist URL-type trailers (file trailers have blob URLs that die on reload)
+  useEffect(() => {
+    const persistable = trailers.filter(t => t.type === 'url');
+    localStorage.setItem('vy_trailers', JSON.stringify(persistable));
+  }, [trailers]);
 
   const login = (email: string, password: string) => {
     if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
@@ -120,15 +136,37 @@ export function AdminProvider({ children }: { children: ReactNode }) {
   const addTrailer = (trailer: Omit<Trailer, 'id' | 'createdAt'>) =>
     setTrailers(p => [...p, { ...trailer, id: uid(), createdAt: new Date().toISOString() }]);
 
-  const uploadTrailer = (file: File, title: string, description: string) => new Promise<void>((res, rej) => {
-    const r = new FileReader();
-    r.onload = () => {
-      setTrailers(p => [...p, { id: uid(), title, description, src: r.result as string, type: 'file', createdAt: new Date().toISOString() }]);
-      res();
-    };
-    r.onerror = rej; r.readAsDataURL(file);
-  });
-  const removeTrailer = (id: string) => setTrailers(p => p.filter(t => t.id !== id));
+  // ── FIX: Use createObjectURL instead of FileReader for video files ──────────
+  // This avoids the base64 memory/localStorage explosion for large MP4 files.
+  // The blob URL is valid for the current session only (cleared on page reload).
+  const uploadTrailer = async (file: File, title: string, description: string) => {
+    const objectUrl = URL.createObjectURL(file);
+    blobUrls.current.push(objectUrl);
+    setTrailers(p => [
+      ...p,
+      {
+        id: uid(),
+        title,
+        description,
+        src: objectUrl,
+        type: 'file',
+        isSessionOnly: true,
+        createdAt: new Date().toISOString(),
+      }
+    ]);
+  };
+
+  const removeTrailer = (id: string) => {
+    setTrailers(p => {
+      const found = p.find(t => t.id === id);
+      // Revoke blob URL to free memory
+      if (found?.type === 'file' && found.src.startsWith('blob:')) {
+        URL.revokeObjectURL(found.src);
+        blobUrls.current = blobUrls.current.filter(u => u !== found.src);
+      }
+      return p.filter(t => t.id !== id);
+    });
+  };
 
   const setFounderPhoto = (src: string) => {
     setFounderPhotoState(src || null);

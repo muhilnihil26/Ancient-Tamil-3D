@@ -1,0 +1,4 @@
+- [Video upload fix](video-upload.md) — large video files must use createObjectURL, never FileReader+base64; file trailers are session-only (not persisted to localStorage)
+- [Trailer sync](trailer-sync.md) — Home page reads trailers from AdminContext (latest admin trailer overrides built-in); Trailer page shows full playlist
+- [BGM per page](bgm-pages.md) — /music page returns createNoOp() so admin songs play; all other routes have synthesized ambient; audio.ts is the source of truth
+- [Vercel deploy fix](vercel-deploy.md) — removing "framework":"vite" from vercel.json fixed the outputDirectory conflict; outputDirectory must be "artifacts/3d-game/dist/public"

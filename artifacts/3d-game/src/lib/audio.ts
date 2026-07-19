@@ -41,9 +41,11 @@ export function playSwordSwoosh(ctx: AudioContext) {
 }
 
 // ── Per-page ambient music objects ───────────────────────────────────────────
-// Each returns a { stop() } handle. Designed to be crossfaded.
-
 export interface AmbientHandle { stop: (fadeTime?: number) => void }
+
+function createNoOp(): AmbientHandle {
+  return { stop: () => {} };
+}
 
 function createDrone(ctx: AudioContext, freqs: number[], vol = 0.04): AmbientHandle {
   const master = ctx.createGain();
@@ -54,7 +56,6 @@ function createDrone(ctx: AudioContext, freqs: number[], vol = 0.04): AmbientHan
   const oscs = freqs.map(f => {
     const o = ctx.createOscillator();
     o.type = 'sine'; o.frequency.value = f;
-    // Slight vibrato
     const lfo = ctx.createOscillator(); lfo.type = 'sine'; lfo.frequency.value = 0.15;
     const lfoG = ctx.createGain(); lfoG.gain.value = f * 0.003;
     lfo.connect(lfoG); lfoG.connect(o.frequency);
@@ -86,19 +87,16 @@ function createRhythm(ctx: AudioContext, bpm: number, vol = 0.06): AmbientHandle
 
   function schedule() {
     if (stopped) return;
-    // Kick drum
     const kick = ctx.createOscillator();
     const kickG = ctx.createGain();
     kick.type = 'sine'; kick.frequency.setValueAtTime(120, t); kick.frequency.exponentialRampToValueAtTime(40, t + 0.1);
     kickG.gain.setValueAtTime(0.4, t); kickG.gain.exponentialRampToValueAtTime(0.001, t + 0.25);
     kick.connect(kickG); kickG.connect(master); kick.start(t); kick.stop(t + 0.3);
-    // Snare noise on beat 3
     const sn = ctx.createBufferSource();
     sn.buffer = noiseBuffer(ctx, 0.12);
     const snF = ctx.createBiquadFilter(); snF.type = 'bandpass'; snF.frequency.value = 3000; snF.Q.value = 1;
     const snG = ctx.createGain(); snG.gain.setValueAtTime(0.15, t + beat * 2); snG.gain.exponentialRampToValueAtTime(0.001, t + beat * 2 + 0.12);
     sn.connect(snF); snF.connect(snG); snG.connect(master); sn.start(t + beat * 2); sn.stop(t + beat * 2 + 0.15);
-
     t += beat * 4;
     const id = setTimeout(schedule, (beat * 4 - 0.1) * 1000);
     ids.push(id);
@@ -150,15 +148,22 @@ function createPluckedMelody(ctx: AudioContext, scale: number[], tempo = 1.8, vo
   };
 }
 
+function createCombined(ctx: AudioContext, handles: AmbientHandle[]): AmbientHandle {
+  return { stop: (fadeTime = 2) => handles.forEach(h => h.stop(fadeTime)) };
+}
+
 // ── Page theme factory ───────────────────────────────────────────────────────
-// D-minor pentatonic (D3-D5): 147, 175, 196, 220, 262, 294, 350, 392, 440, 523, 587
 const D_MINOR = [147, 175, 196, 220, 262, 294, 350, 392];
 const A_MINOR = [220, 261.6, 293.7, 329.6, 392, 440];
 const G_MAJOR = [196, 246.9, 293.7, 369.9, 440, 587.3];
 const E_MINOR = [164.8, 220, 246.9, 293.7, 329.6, 392];
+const C_MAJOR = [261.6, 293.7, 329.6, 392, 440, 523.3];
 
 export function createPageAmbient(ctx: AudioContext, page: string): AmbientHandle {
-  switch (page) {
+  // Normalize path (strip trailing slash, handle sub-routes)
+  const p = page === '/' ? '/' : page.split('/').slice(0, 2).join('/');
+
+  switch (p) {
     case '/':          // Home — epic low drone + bell melody
       return createCombined(ctx, [
         createDrone(ctx, [55, 82.4, 110], 0.03),
@@ -193,15 +198,20 @@ export function createPageAmbient(ctx: AudioContext, page: string): AmbientHandl
       ]);
     case '/download':  // Download — triumphant ascending
       return createPluckedMelody(ctx, [261.6, 329.6, 392, 523.3, 659.3, 783.9], 1.2, 0.05);
+    case '/news':
+      return createPluckedMelody(ctx, C_MAJOR, 3, 0.04);
+    case '/achievements':
+      return createCombined(ctx, [
+        createDrone(ctx, [196, 261.6, 392], 0.03),
+        createPluckedMelody(ctx, G_MAJOR, 2, 0.04),
+      ]);
+    case '/contact':
+      return createDrone(ctx, [130.8, 196], 0.025);
+    case '/music':     // Music page — SILENT so admin songs play without competition
+      return createNoOp();
     default:
       return createDrone(ctx, [110, 165], 0.02);
   }
-}
-
-function createCombined(ctx: AudioContext, handles: AmbientHandle[]): AmbientHandle {
-  return {
-    stop: (fadeTime = 2) => handles.forEach(h => h.stop(fadeTime))
-  };
 }
 
 // Legacy export
